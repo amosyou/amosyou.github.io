@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amos You</title>
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="https://unpkg.com/katex@latest/dist/katex.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/prismjs@1.20.0/themes/prism.css">
+</head>
+<body>
+  <header>
+    <h1>Amos You</h1>
+    <nav>
+      <ul class="nav">
+        <li class="nav-item"><a href="/" >Home</a></li>
+        <li class="nav-item"><a href="/blog/" >Blog</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    
+<h1>Building a Deep Learning Rig</h1>
+<h3><em>slightly less GPU poor</em></h3>
+<h4>February 12, 2025</h4>
+
+<p>While procrastinating on preparing for final exams last semester, I was scrolling on Craigslist and came across a $1.1k AI workstation deal. Here were the specs:</p>
+<ul>
+<li>Motherboard: Asus ROG STRIX Z490-G</li>
+<li>CPU: Intel Core i9-10850K (3.6GHz, 10 cores, 20 threads)</li>
+<li>CPU Cooler: Noctua NH-U12A-P</li>
+<li>RAM: 64GB (2 x Kingston DDR4-3200)</li>
+<li>GPU: PNY GeForce RTX 3090 XLR8 REVEL 24GB</li>
+<li>SSD: Samsung 970 EVO Plus 2TB M.2 SSD</li>
+<li>Case: Fractal Design Define Mini C</li>
+<li>Power Supply: Super Flower LEADEX Platinum 850W</li>
+<li>3x Noctua 120mm NF-F12 PWM Fans</li>
+</ul>
+<p>In late 2024 / early 2025, RTX 3090 prices on the used market are still on average ~$700. If we fix this GPU cost, I figured the remaining parts would certainly be worth more than $400.</p>
+<p>A few days after purchasing the workstation, I came across a used ASUS ROG Strix GeForce RTX 3090 for $500. The heatsink was slightly rusted since the owner had been using his gaming PC on his patio in a humid environment (lol ikr), but since it was functioning just fine I decided to buy.</p>
+<h2>hacky solutions</h2>
+<p>Now that I had all the hardware, I realized I had a few issues.</p>
+<ol>
+<li>
+<p>an 850w PSU may not be sufficient for 2x RTX 3090s</p>
+</li>
+<li>
+<p>the case was not large enough to fit the new GPU, both in terms of length and height. this is due to having an mATX case and longer GPU</p>
+</li>
+<li>
+<p>the mATX motherboard has front panel header and case fan pins at the bottom. the additional GPU in the second PCIe slot would not clear the the cables</p>
+   <figure>
+     <img alt="gpu_big" loading="lazy" decoding="async" src="/img/gpu_big-600w.jpeg" width="1800" height="2380" srcset="/img/gpu_big-600w.jpeg 600w, /img/gpu_big-1200w.jpeg 1200w, /img/gpu_big-1800w.jpeg 1800w" sizes="100vw">
+     <figcaption style="text-align: center; font-style: italic;">GPU too fat</figcaption>
+   </figure>
+</li>
+</ol>
+<p>In regards to (1), a lot of people recommend upgrading to a 1000w+ PSU for dual RTX 3090 setups. Since I’m too lazy and don’t want to spend any more money on a new PSU, I decided to just power limit both the GPUs, which should allow us to still use the 850w PSU.</p>
+<p>For (2), the only reasonable solution is to upgrade the case. I went for the LIAN LI LANCOOL 207 due to its airflow performance. There are 2 bottom fans for direct airflow to the GPUs, which would be optimal in my case with 2 GPUs sandwiched one on the other.</p>
+<p>Lastly on (3), this one was trickier. I found a Reddit thread where people have tried these 2x10 90-degree pins, but these weren’t useful since the GPU still couldn’t clear the pins. The other solution, which worked, was to use jumper wires from breadboards, trim off a bit of the plastic housing, and this should be low profile enough for the GPU to clear the cable.</p>
+<p><figure><br>
+<img alt="trimmed_cable" loading="lazy" decoding="async" src="/img/trimmed_cable-600w.jpeg" width="1800" height="1200" srcset="/img/trimmed_cable-600w.jpeg 600w, /img/trimmed_cable-1200w.jpeg 1200w, /img/trimmed_cable-1800w.jpeg 1800w" sizes="100vw"><br>
+<figcaption style="text-align: center; font-style: italic;">trimmed jumper wire vs stock</figcaption><br>
+</figure></p>
+<p><figure><br>
+<img alt="jumper_front" loading="lazy" decoding="async" src="/img/jumper_front-600w.jpeg" width="1800" height="1587" srcset="/img/jumper_front-600w.jpeg 600w, /img/jumper_front-1200w.jpeg 1200w, /img/jumper_front-1800w.jpeg 1800w" sizes="100vw"><br>
+<figcaption style="text-align: center; font-style: italic;">jumper -&gt; front panel header</figcaption><br>
+</figure></p>
+<p>I was extremely lucky that the GPU could seat properly even with the stock case fan cables inserted. The cables are touching the GPU heatsink but whatever, there’s nothing I can really do about that.</p>
+<p>On a side note, I also upgraded to 128GB RAM by adding another 2x 32GB sticks. This should help quite a bit for memory intensive tasks like data processing and weight offloading.</p>
+<h2>setup</h2>
+<p>The next step is to setup the rig. I’m using <a href="https://tailscale.com/">Tailscale</a> to enable remote SSH access, nvidia-smi to power limit the GPUs, and tinygrad’s <a href="https://github.com/tinygrad/open-gpu-kernel-modules">open-gpu-kernel-modules</a> for p2p support.</p>
+<h3>Tailscale</h3>
+<p>Tailscale makes remote SSH access really easy to setup. With Tailscale, you can configure devices to be part of a VPN, which allows for convenient SSH access over this network. You can find more details on Tailscale setup from this <a href="https://pipegalera.com/posts/ubuntu-server-tailscale/">blog</a>.</p>
+<h3>undervolting GPUs</h3>
+<p>In a bash script <code>nvidia-pl.sh</code>, you can use these commands to power limit the GPUs.</p>
+<pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># enable persistent mode</span>
+<span class="token function">sudo</span> nvidia-smi <span class="token parameter variable">-pm</span> <span class="token number">1</span>
+<span class="token comment"># power limit to 225w</span>
+<span class="token function">sudo</span> nvidia-smi <span class="token parameter variable">-pl</span> <span class="token number">225</span></code></pre>
+<p>And to ensure these commands are run after reboot, edit the crontab by running <code>crontab -e</code>, and adding this line to the file.</p>
+<pre class="language-bash"><code class="language-bash">@reboot <span class="token function">sh</span> /path/to/nvidia-pl.sh</code></pre>
+<h3>p2p drivers [wip]</h3>
+<p>tinygrad has a fork of NVIDIA’s open-gpu-kernel-modules, which is a mod that enables peer-to-peer (P2P) support over PCIe. Ideally, you would want NVLink bridge when you have multiple GPUs in a node, but since my GPUs are not the same size, the NVLink bridge will not fit. This mod should improve performance whenever we shard and partition across GPUs, such as all-reduce or all-gather operations. will benchmark this on nccl in the future!</p>
+<p>And here we have it, build is complete!</p>
+
+  </main>
+</body>
+<footer class="site-footer">
+  <div>
+    <a href="mailto:amosyou@berkeley.edu">email</a> | <a href="https://linkedin.com/in/amosyou">linkedin</a> | <a
+      href="https://scholar.google.com/citations?user=qnx1oeIAAAAJ&hl=en">scholar</a> | <a
+      href="https://github.com/amosyou">github</a>
+  </div>
+</footer>
+</html>
