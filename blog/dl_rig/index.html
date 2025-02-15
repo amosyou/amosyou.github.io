@@ -24,6 +24,10 @@
 <h3><em>slightly less GPU poor</em></h3>
 <h4>February 12, 2025</h4>
 
+<p><figure><br>
+<img alt="finished_rig" loading="lazy" decoding="async" src="/img/finished_rig-600w.jpeg" width="1800" height="1800" srcset="/img/finished_rig-600w.jpeg 600w, /img/finished_rig-1200w.jpeg 1200w, /img/finished_rig-1800w.jpeg 1800w" sizes="100vw"><br>
+<figcaption style="text-align: center; font-style: italic;">finished rig</figcaption><br>
+</figure></p>
 <p>While procrastinating on preparing for final exams last semester, I was scrolling on Craigslist and came across a $1.1k AI workstation deal. Here were the specs:</p>
 <ul>
 <li>Motherboard: Asus ROG STRIX Z490-G</li>
@@ -36,8 +40,9 @@
 <li>Power Supply: Super Flower LEADEX Platinum 850W</li>
 <li>3x Noctua 120mm NF-F12 PWM Fans</li>
 </ul>
-<p>In late 2024 / early 2025, RTX 3090 prices on the used market are still on average ~$700. If we fix this GPU cost, I figured the remaining parts would certainly be worth more than $400.</p>
-<p>A few days after purchasing the workstation, I came across a used ASUS ROG Strix GeForce RTX 3090 for $500. The heatsink was slightly rusted since the owner had been using his gaming PC on his patio in a humid environment (lol ikr), but since it was functioning just fine I decided to buy.</p>
+<p>In late 2024 / early 2025, RTX 3090 prices on the used market are still on average ~$700. If we fix this GPU cost, I figured the remaining parts would certainly be worth more than $400. I had to cop.</p>
+<p>A few days after purchasing the workstation, I came across a used ASUS ROG Strix GeForce RTX 3090 for $500. The heatsink was slightly rusted since the owner had been using his gaming PC on his patio in a humid environment (lol ikr), but since it was functioning just fine I decided to also cop.</p>
+<p>Although 3090s are now 3 generations old, they still remain the only consumer card (other than 4090) with 24GB VRAM. My main goal is to have a dev machine for early prototyping of research ideas, and as needed I can scale up to large GPU clusters.</p>
 <h2>hacky solutions</h2>
 <p>Now that I had all the hardware, I realized I had a few issues.</p>
 <ol>
@@ -84,6 +89,12 @@
 <h3>p2p drivers [wip]</h3>
 <p>tinygrad has a fork of NVIDIA’s open-gpu-kernel-modules, which is a mod that enables peer-to-peer (P2P) support over PCIe. Ideally, you would want NVLink bridge when you have multiple GPUs in a node, but since my GPUs are not the same size, the NVLink bridge will not fit. This mod should improve performance whenever we shard and partition across GPUs, such as all-reduce or all-gather operations. will benchmark this on nccl in the future!</p>
 <p>And here we have it, build is complete!</p>
+<hr>
+<br>
+<p><em>Edit: 2/15/2025</em></p>
+<h3>smart plug</h3>
+<p>Although I could leave the rig running 24/7, it would be better to have a way to turn the rig on and off as needed - mainly a peace of mind for myself so that it doesn’t burn down my home when I’m away. I bought a smart plug which I can easily control using Apple Homekit. In the BIOS, I configured the rig to turn on when “Restoring from AC power loss.”</p>
+<p>Now, I can turn on the smart plug to boot up the rig. To power off, I can run <code>shutdown -h now</code> and turn off the smart plug.</p>
 
   </main>
 </body>
