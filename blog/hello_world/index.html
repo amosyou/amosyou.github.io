@@ -7,12 +7,22 @@
   <link rel="stylesheet" href="/css/index.css">
   <link rel="stylesheet" href="https://unpkg.com/katex@latest/dist/katex.min.css">
   <link rel="stylesheet" href="https://unpkg.com/prismjs@1.20.0/themes/prism.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script>
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest('.reveal[data-string]');
+      if (!el) return;
+
+      const span = document.createElement('span');
+      span.className = 'revealed';
+
+      span.textContent = el.dataset.string;
+      el.replaceWith(span);
+    });
+  </script>
 </head>
 <body>
-  <header>
-    <h1>Amos You</h1>
-    
-  </header>
   <main>
     
 <h1>Hello, world!</h1>
@@ -24,11 +34,4 @@
 
   </main>
 </body>
-<footer class="site-footer">
-  <div>
-    <a href="mailto:amosyou@berkeley.edu">email</a> | <a href="https://linkedin.com/in/amosyou">linkedin</a> | <a
-      href="https://scholar.google.com/citations?user=qnx1oeIAAAAJ&hl=en">scholar</a> | <a
-      href="https://github.com/amosyou">github</a>
-  </div>
-</footer>
 </html>

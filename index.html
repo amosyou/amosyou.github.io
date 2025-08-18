@@ -7,49 +7,45 @@
   <link rel="stylesheet" href="/css/index.css">
   <link rel="stylesheet" href="https://unpkg.com/katex@latest/dist/katex.min.css">
   <link rel="stylesheet" href="https://unpkg.com/prismjs@1.20.0/themes/prism.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script>
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest('.reveal[data-string]');
+      if (!el) return;
+
+      const span = document.createElement('span');
+      span.className = 'revealed';
+
+      span.textContent = el.dataset.string;
+      el.replaceWith(span);
+    });
+  </script>
 </head>
 <body>
-  <header>
-    <h1>Amos You</h1>
-    
-  </header>
   <main>
     
-<div class="intro-container">
-  <div class="intro-text">
-    <div>
-      <p>👋 Hi! I'm Amos.</p>
-      <p>I'm a 4th-year undergraduate student at UC Berkeley studying Computer Science.</p>
-      <p>
-        My interests are in the broad areas of efficient machine learning and optimization, with a focus on vision and language models.
-        Currently, I'm working on LLM inference/serving at <a class="bold" href="https://sky.cs.berkeley.edu/">Sky Lab</a> and video-language understanding at <a class="bold" href="https://bair.berkeley.edu">BAIR</a>.
-        I also tinker with machine learning within the vibrant community at <a class="bold" href="https://launchpad.berkeley.edu">Launchpad</a>.
-      </p>
-    </div>
+<header>
+  <div class="intro">
+    <h1>Amos You</h1>
+    <p>
+      <button type="button" class="linklike reveal" data-string="amosyou [at] berkeley [dot] edu">email</button>
+      <noscript><code>amosyou [at] berkeley [dot] edu</code></noscript> | 
+      <a href="https://x.com/amooseyou">twitter</a> |
+      <a href="https://linkedin.com/in/amosyou">linkedin</a> |
+      <a href="https://scholar.google.com/citations?user=qnx1oeIAAAAJ&hl=en">scholar</a> |
+      <a href="https://github.com/amosyou">github</a>
+    <p>
   </div>
-  <div class="intro-image">
-    <div>
-      <img src="profile.jpg" alt="profile" width="200" height="200">
-    </div>
-  </div>
-</div>
+  
+</header>
 
-<p>
-  Previously, I developed tooling for recommender system explainability at <a class="bold" href="https://www.linkedin.com/">LinkedIn</a>, trained video diffusion models for <a class="bold" href="https://www.magnopus.com/">Magnopus</a>, and fine-tuned LLMs at <a class="bold" href="https://www.autodesk.com/">Autodesk</a>.
-</p>
-
-<p>
-  Outside of work, I enjoy <a class="bold" href="https://www.worldcubeassociation.org/persons/2014YOUA01">solving Rubik's Cubes</a>, going on long bike rides, and capturing moments on my digicam/film camera.
-</p>
+<p>I’m an AI engineer / researcher in SF.</p>
+<p>Previously, I worked on LLM / recommender systems post-training and evaluations at <a href="https://www.linkedin.com/">LinkedIn</a>, and LLM fine-tuning at <a href="https://www.autodesk.com/">Autodesk</a>.</p>
+<p>I received my Bachelor’s degree in Computer Science at UC Berkeley. I was fortunate to have collaborated with the research community from <a href="https://bair.berkeley.edu">BAIR</a>, <a href="https://sky.cs.berkeley.edu/">Sky Computing Lab</a>, and <a href="https://launchpad.berkeley.edu">Launchpad</a>.</p>
+<p>Outside of work, I enjoy <a href="https://www.worldcubeassociation.org/persons/2014YOUA01">solving Rubik’s Cubes</a>, going on long bike rides, and capturing moments on my digicam/film camera.</p>
 
 
   </main>
 </body>
-<footer class="site-footer">
-  <div>
-    <a href="mailto:amosyou@berkeley.edu">email</a> | <a href="https://linkedin.com/in/amosyou">linkedin</a> | <a
-      href="https://scholar.google.com/citations?user=qnx1oeIAAAAJ&hl=en">scholar</a> | <a
-      href="https://github.com/amosyou">github</a>
-  </div>
-</footer>
 </html>
